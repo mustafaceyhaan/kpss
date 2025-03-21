@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KPSS Tarih Çalışma Sitesi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        .quiz-container, .message {
+            display: none;
+            margin-top: 20px;
+        }
+        button {
+            padding: 14px 24px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            transition: 0.3s;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        #result {
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KPSS Tarih Çalışma Sitesi</h1>
+        <p>Merhaba! Burada KPSS tarih çalışabilir ve test çözebilirsin.</p>
+        <button onclick="showQuiz()">Test Çöz</button>
+        <button onclick="showMessage()">Özel Mesaj</button>
+
+        <div class="quiz-container" id="quiz">
+            <p id="question">Soru yüklenecek...</p>
+            <button id="answer1" onclick="checkAnswer(0)"></button>
+            <button id="answer2" onclick="checkAnswer(1)"></button>
+            <button id="answer3" onclick="checkAnswer(2)"></button>
+            <button id="answer4" onclick="checkAnswer(3)"></button>
+            <p id="result"></p>
+        </div>
+
+        <div class="message" id="secretMessage">
+            <p>Mustafa salak mı?</p>
+            <button onclick="evetClick()">Evet</button>
+            <button id="hayirButton">Hayır</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Türkiye Cumhuriyeti'nin kurucusu kimdir?",
+                answers: ["Süleyman Demirel", "Turgut Özal", "Mustafa Kemal Atatürk", "Recep Tayyip Erdoğan"],
+                correct: 2
+            },
+            {
+                question: "Osmanlı Devleti hangi yılda kurulmuştur?",
+                answers: ["1299", "1453", "1071", "1923"],
+                correct: 0
+            },
+            {
+                question: "I. Dünya Savaşı hangi yıllar arasında gerçekleşti?",
+                answers: ["1914-1918", "1939-1945", "1900-1904", "1920-1923"],
+                correct: 0
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function showQuiz() {
+            document.getElementById("quiz").style.display = "block";
+            document.getElementById("secretMessage").style.display = "none";
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            let question = questions[currentQuestionIndex];
+            document.getElementById("question").innerText = question.question;
+            question.answers.forEach((answer, i) => {
+                document.getElementById(`answer${i + 1}`).innerText = answer;
+            });
+            document.getElementById("result").innerText = "";
+        }
+
+        function checkAnswer(selected) {
+            let question = questions[currentQuestionIndex];
+            if (selected === question.correct) {
+                score++;
+                document.getElementById("result").innerText = "Doğru! Skorunuz: " + score;
+                
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    setTimeout(loadQuestion, 2000);
+                } else {
+                    setTimeout(() => {
+                        document.getElementById("result").innerText = `Test tamamlandı! Toplam skorunuz: ${score}`;
+                    }, 2000);
+                }
+            } else {
+                document.getElementById("result").innerText = "Yanlış! Lütfen tekrar deneyin.";
+            }
+        }
+
+        function showMessage() {
+            document.getElementById("quiz").style.display = "none";
+            document.getElementById("secretMessage").style.display = "block";
+        }
+
+        function evetClick() {
+            alert("Ah, doğruyu söyledin! 😊");
+        }
+
+        document.getElementById("hayirButton").onmouseover = function() {
+            let btn = this;
+            let x = Math.random() * (window.innerWidth - btn.clientWidth);
+            let y = Math.random() * (window.innerHeight - btn.clientHeight);
+            btn.style.position = "absolute";
+            btn.style.left = `${x}px`;
+            btn.style.top = `${y}px`;
+        };
+    </script>
+</body>
+</html>
